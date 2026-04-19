@@ -38,15 +38,14 @@ $(document).ready(function() {
 			autoplaySpeed: 3000,
     }
 
-		// Initialize all div with carousel class
-    var carousels = bulmaCarousel.attach('.carousel', options);
-
-    // Loop on each carousel initialized
-    for(var i = 0; i < carousels.length; i++) {
-    	// Add listener to  event
-    	carousels[i].on('before:show', state => {
-    		console.log(state);
-    	});
+		// Initialize carousels only when present (template may omit them).
+    if (document.querySelector('.carousel')) {
+      var carousels = bulmaCarousel.attach('.carousel', options);
+      for(var i = 0; i < carousels.length; i++) {
+        carousels[i].on('before:show', state => {
+          console.log(state);
+        });
+      }
     }
 
     // Access to bulmaCarousel instance of an element
@@ -65,13 +64,14 @@ $(document).ready(function() {
         player.currentTime = player.duration / 100 * this.value;
       })
     }, false);*/
-    preloadInterpolationImages();
-
-    $('#interpolation-slider').on('input', function(event) {
-      setInterpolationImage(this.value);
-    });
-    setInterpolationImage(0);
-    $('#interpolation-slider').prop('max', NUM_INTERP_FRAMES - 1);
+    if ($('#interpolation-slider').length) {
+      preloadInterpolationImages();
+      $('#interpolation-slider').on('input', function(event) {
+        setInterpolationImage(this.value);
+      });
+      setInterpolationImage(0);
+      $('#interpolation-slider').prop('max', NUM_INTERP_FRAMES - 1);
+    }
 
     bulmaSlider.attach();
 

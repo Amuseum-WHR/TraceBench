@@ -2,6 +2,30 @@ body {
   font-family: 'Noto Sans', sans-serif;
 }
 
+/* Paper-style notation: same serif for f, g, ⊕, C (Castoro is already loaded on the page). */
+.trace-math {
+  font-family: 'Castoro', 'Noto Serif', 'Georgia', serif;
+  font-style: italic;
+  font-size: 1.06em;
+  padding: 0 0.04em;
+}
+
+.trace-math-upright {
+  font-family: 'Castoro', 'Noto Serif', 'Georgia', serif;
+  font-style: normal;
+  font-weight: 700;
+  font-size: 1.06em;
+  padding: 0 0.04em;
+}
+
+.trace-math-symbol {
+  font-family: 'Castoro', 'Noto Serif', 'Georgia', serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 1.06em;
+  padding: 0 0.04em;
+}
+
 
 .footer .icon-link {
     font-size: 25px;
@@ -109,6 +133,63 @@ body {
 
 .publication-body img {
 }
+
+.publication-figure {
+  margin: 0 auto;
+}
+
+.publication-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  border: 1px solid #e8e8e8;
+}
+
+.figure-caption {
+  margin-top: 0.75rem;
+  color: #4a4a4a;
+  font-size: 0.95rem;
+  line-height: 1.45;
+}
+
+/* Narrower radar chart so it does not dominate the column */
+.radar-wrap {
+  max-width: 68%;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media screen and (max-width: 768px) {
+  .radar-wrap {
+    max-width: 100%;
+  }
+}
+
+.radar-wrap .publication-figure {
+  margin-bottom: 0;
+}
+
+.figure-section {
+  margin-top: 2.75rem;
+  text-align: left;
+}
+
+.figure-section:first-of-type {
+  margin-top: 1rem;
+}
+
+.figure-section .title.is-4 {
+  margin-bottom: 0.75rem;
+}
+
+.table-figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 6px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+
 
 .results-carousel {
   overflow: hidden;

@@ -1,2 +1,32 @@
+# macOS
+.DS_Store
 .DS_store
-.idea
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Editors / IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Local tooling (if you ever add scripts here)
+.venv/
+.venv_*/
+__pycache__/
+*.pyc
+
+# Local paper PDFs — site links to arXiv; keep PDFs on disk only
+static/papers/*.pdf
+
+# Large local source image (page uses teaser2.jpg); do not commit
+static/images/teaser.jpg
+
+# Cursor / local agent (optional)
+.cursor/
