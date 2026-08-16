@@ -1,348 +1,1521 @@
-<!DOCTYPE html>
-<html>
-<head>
-  <meta charset="utf-8">
-  <meta name="description"
-        content="TRACE-Bench is a capability-oriented benchmark for decomposing and diagnosing multi-reference image generation.">
-  <meta name="keywords" content="TRACE-Bench, Multi-Reference Image Generation, Benchmark, Evaluation">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>TRACE-Bench: Decomposing and Diagnosing Multi-Reference Image Generation</title>
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1830" />
+    <meta name="color-scheme" content="light" />
+    <meta name="robots" content="index, follow" />
+    <meta
+      name="description"
+      content="TRACE-Bench is a capability-oriented benchmark for decomposing, evaluating, and diagnosing multi-reference image generation."
+    />
+    <meta
+      name="keywords"
+      content="TRACE-Bench, multi-reference image generation, benchmark, image generation evaluation, diagnostic evaluation"
+    />
 
-  <!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-PYVRSFMDRL"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="TRACE-Bench" />
+    <meta
+      property="og:title"
+      content="TRACE-Bench: Decomposing and Diagnosing Multi-Reference Image Generation"
+    />
+    <meta
+      property="og:description"
+      content="From one holistic score to traceable capabilities: Anchor, Disentangle, Apply, and Compose."
+    />
+    <meta
+      property="og:url"
+      content="https://amuseum-whr.github.io/TraceBench.github.io/"
+    />
+    <meta
+      property="og:image"
+      content="https://amuseum-whr.github.io/TraceBench.github.io/static/images/og-tracebench.jpg"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="TRACE-Bench title with the four capability operators and representative benchmark cases."
+    />
 
-    function gtag() {
-      dataLayer.push(arguments);
-    }
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="TRACE-Bench" />
+    <meta
+      name="twitter:description"
+      content="Capability-oriented evaluation and diagnosis for multi-reference image generation."
+    />
+    <meta
+      name="twitter:image"
+      content="https://amuseum-whr.github.io/TraceBench.github.io/static/images/og-tracebench.jpg"
+    />
 
-    gtag('js', new Date());
+    <meta
+      name="citation_title"
+      content="TRACE-Bench: Decomposing and Diagnosing Multi-Reference Image Generation"
+    />
+    <meta name="citation_author" content="Haoran Wang" />
+    <meta name="citation_author" content="Chaofan Ma" />
+    <meta name="citation_author" content="Ran Yi" />
+    <meta name="citation_author" content="Lizhuang Ma" />
+    <meta name="citation_publication_date" content="2026" />
 
-    gtag('config', 'G-PYVRSFMDRL');
-  </script>
+    <title>TRACE-Bench | Multi-Reference Image Generation Benchmark</title>
+    <link
+      rel="canonical"
+      href="https://amuseum-whr.github.io/TraceBench.github.io/"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="128x128"
+      href="./static/images/favicon.png"
+    />
+    <link
+      rel="preload"
+      as="image"
+      type="image/webp"
+      href="./static/images/tracebench/teaser.webp"
+    />
+    <link rel="stylesheet" href="./static/css/index.css" />
 
-  <link href="https://fonts.googleapis.com/css?family=Google+Sans|Noto+Sans|Castoro"
-        rel="stylesheet">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "ScholarlyArticle",
+        "name": "TRACE-Bench: Decomposing and Diagnosing Multi-Reference Image Generation",
+        "datePublished": "2026",
+        "author": [
+          { "@type": "Person", "name": "Haoran Wang" },
+          { "@type": "Person", "name": "Chaofan Ma" },
+          { "@type": "Person", "name": "Ran Yi" },
+          { "@type": "Person", "name": "Lizhuang Ma" }
+        ],
+        "affiliation": {
+          "@type": "CollegeOrUniversity",
+          "name": "Shanghai Jiao Tong University"
+        },
+        "description": "A capability-oriented benchmark for decomposing, evaluating, and diagnosing multi-reference image generation.",
+        "url": "https://amuseum-whr.github.io/TraceBench.github.io/"
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to content</a>
 
-  <link rel="stylesheet" href="./static/css/bulma.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-carousel.min.css">
-  <link rel="stylesheet" href="./static/css/bulma-slider.min.css">
-  <link rel="stylesheet" href="./static/css/fontawesome.all.min.css">
-  <link rel="stylesheet"
-        href="https://cdn.jsdelivr.net/gh/jpswalsh/academicons@1/css/academicons.min.css">
-  <link rel="stylesheet" href="./static/css/index.css">
-  <link rel="icon" href="./static/images/favicon.svg">
-  <!-- Paper links: replace 0000.00000 with your arXiv ID when public. -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script defer src="./static/js/fontawesome.all.min.js"></script>
-  <script src="./static/js/bulma-carousel.min.js"></script>
-  <script src="./static/js/bulma-slider.min.js"></script>
-  <script src="./static/js/index.js"></script>
-</head>
-<body>
+    <header class="site-header" data-site-header>
+      <div class="nav-shell">
+        <a class="brand" href="#top" aria-label="TRACE-Bench home">
+          <span class="brand-mark" aria-hidden="true">T</span>
+          <span>TRACE-Bench</span>
+        </a>
 
-<nav class="navbar" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false">
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-      <span aria-hidden="true"></span>
-    </a>
-  </div>
-  <div class="navbar-menu">
-    <div class="navbar-start" style="flex-grow: 1; justify-content: center;">
-      <a class="navbar-item" href="#teaser">Teaser</a>
-      <a class="navbar-item" href="#abstract">Abstract</a>
-      <a class="navbar-item" href="#overview">Overview</a>
-      <a class="navbar-item" href="#results">Results</a>
-      <a class="navbar-item" href="#BibTeX">BibTeX</a>
-    </div>
-  </div>
-</nav>
+        <button
+          class="nav-toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="site-nav"
+          data-nav-toggle
+        >
+          <span class="sr-only">Toggle navigation</span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+          <span aria-hidden="true"></span>
+        </button>
 
+        <nav
+          class="site-nav"
+          id="site-nav"
+          aria-label="Primary navigation"
+          data-site-nav
+        >
+          <a href="#motivation">Motivation</a>
+          <a href="#framework">Framework</a>
+          <a href="#benchmark">Benchmark</a>
+          <a href="#results">Results</a>
+          <a href="#diagnosis">Diagnosis</a>
+          <a class="nav-cta" href="#citation">Citation</a>
+        </nav>
+      </div>
+    </header>
 
-<section class="hero">
-  <div class="hero-body">
-    <div class="container is-max-desktop">
-      <div class="columns is-centered">
-        <div class="column has-text-centered">
-          <h1 class="title is-1 publication-title">TRACE-Bench: Decomposing and Diagnosing Multi-Reference Image Generation</h1>
-          <div class="is-size-5 publication-authors">
-            <span class="author-block">
-              Haoran Wang<sup>1</sup>,</span>
-            <span class="author-block">
-              Chaofan Ma<sup>1</sup>,</span>
-            <span class="author-block">
-              Ran Yi<sup>1</sup>,
-            </span>
-            <span class="author-block">
-              Lizhuang Ma<sup>1</sup><sup>*</sup>
-            </span>
+    <main id="main-content">
+      <section class="hero" id="top" aria-labelledby="page-title">
+        <div class="hero-formula hero-formula--one" aria-hidden="true">
+          C(f₁, f₂ ⊕ g₁) ⊕ g<sub>style</sub>
+        </div>
+        <div class="hero-formula hero-formula--two" aria-hidden="true">
+          slot(F) = |f| + |g|
+        </div>
+        <div class="page-shell hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">
+              <span class="eyebrow-dot"></span> Capability-oriented evaluation
+            </p>
+            <h1 id="page-title">
+              <span>TRACE-Bench</span>
+              <small
+                >Decomposing and Diagnosing<br />Multi-Reference Image
+                Generation</small
+              >
+            </h1>
+            <p class="hero-lede">
+              Multi-reference generation is combinatorial. Its evaluation should
+              be compositional. TRACE-Bench replaces coarse task labels with
+              four atomic operators and turns every prompt into a traceable
+              formula.
+            </p>
+
+            <ul class="authors" aria-label="Authors">
+              <li>
+                <a href="mailto:a.museum@sjtu.edu.cn"
+                  >Haoran Wang<sup>*</sup></a
+                >
+              </li>
+              <li>
+                <a href="mailto:chaofanma@sjtu.edu.cn"
+                  >Chaofan Ma<sup>*</sup></a
+                >
+              </li>
+              <li>
+                <a href="mailto:ranyi@sjtu.edu.cn">Ran Yi<sup>†</sup></a>
+              </li>
+              <li>
+                <a href="mailto:ma-lz@cs.sjtu.edu.cn"
+                  >Lizhuang Ma<sup>‡</sup></a
+                >
+              </li>
+            </ul>
+            <p class="affiliation">Shanghai Jiao Tong University</p>
+            <p class="author-notes">
+              <span>* Equal contribution</span><span>† Project lead</span
+              ><span>‡ Corresponding author</span>
+            </p>
+
+            <div
+              class="hero-actions"
+              role="group"
+              aria-label="Project resources"
+            >
+              <button
+                class="button button--disabled"
+                type="button"
+                disabled
+                title="Paper link coming soon"
+              >
+                Paper <span class="button-status">soon</span>
+              </button>
+              <a class="button button--primary" href="#citation">BibTeX</a>
+              <a
+                class="button button--outline"
+                href="https://github.com/Amuseum-WHR/TraceBench.github.io"
+                target="_blank"
+                rel="noreferrer"
+                >Page source <span aria-hidden="true">↗</span></a
+              >
+            </div>
           </div>
 
-          <div class="is-size-5 publication-authors">
-            <span class="author-block"><sup>1</sup>Shanghai Jiao Tong University</span>
+          <aside class="hero-summary" aria-label="Benchmark summary">
+            <div class="summary-heading">
+              <span class="summary-kicker">One shared language</span>
+              <strong>from construction to diagnosis</strong>
+            </div>
+            <ol class="summary-flow">
+              <li>
+                <span>01</span>
+                <div>
+                  <strong>Decompose</strong
+                  ><small>Express each reference demand as an operator.</small>
+                </div>
+              </li>
+              <li>
+                <span>02</span>
+                <div>
+                  <strong>Evaluate</strong
+                  ><small
+                    >Score identity, attributes, binding, and composition
+                    separately.</small
+                  >
+                </div>
+              </li>
+              <li>
+                <span>03</span>
+                <div>
+                  <strong>Diagnose</strong
+                  ><small
+                    >Recursively simplify failed cases to localize
+                    interference.</small
+                  >
+                </div>
+              </li>
+            </ol>
+            <ul class="mini-operators">
+              <li class="op-anchor"><i>f</i> Anchor</li>
+              <li class="op-disentangle"><i>g</i> Disentangle</li>
+              <li class="op-apply"><i>⊕</i> Apply</li>
+              <li class="op-compose"><i>C</i> Compose</li>
+            </ul>
+          </aside>
+        </div>
+      </section>
+
+      <section class="teaser-section" aria-labelledby="teaser-title">
+        <div class="page-shell page-shell--wide">
+          <div class="teaser-takeaway">
+            <p class="section-kicker">The central observation</p>
+            <h2 id="teaser-title">
+              A plausible image can still violate several reference
+              requirements.
+            </h2>
+            <p>
+              TRACE-Bench marks what survived, what failed, and where each
+              failure occurred.
+            </p>
           </div>
-          <div class="is-size-6 publication-authors">
-            <span class="author-block"><sup>*</sup>Corresponding author</span>
+          <figure class="paper-figure paper-figure--hero">
+            <div
+              class="figure-viewport figure-viewport--medium"
+              tabindex="0"
+              aria-label="Scrollable TRACE-Bench representative cases figure"
+            >
+              <img
+                src="./static/images/tracebench/teaser.webp"
+                width="2400"
+                height="1647"
+                fetchpriority="high"
+                alt="Six representative multi-reference generation cases with reference images, generated outputs, green satisfied requirements, and red localized failures."
+              />
+            </div>
+            <figcaption>
+              <strong>Representative cases from TRACE-Bench.</strong>
+              Green tags denote satisfied requirements, red tags denote failed
+              requirements, and red boxes mark localized failures.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section
+        class="section section--paper"
+        id="abstract"
+        aria-labelledby="abstract-title"
+      >
+        <div class="page-shell content-narrow">
+          <header class="section-heading section-heading--center">
+            <p class="section-kicker">Abstract</p>
+            <h2 id="abstract-title">
+              From task-oriented bins to capability-oriented evaluation
+            </h2>
+          </header>
+          <div class="abstract-copy">
+            <p>
+              Existing multi-reference benchmarks rely on predefined task
+              types, producing fragmented coverage, uncontrolled complexity,
+              and opaque holistic scores. TRACE-Bench instead represents each
+              prompt as a compositional formula over four reusable operations—
+              <strong>Anchor</strong> (<i>f</i>),
+              <strong>Disentangle</strong> (<i>g</i>),
+              <strong>Apply</strong> (⊕), and
+              <strong>Compose</strong> (<i>C</i>).
+            </p>
+            <p>
+              The benchmark comprises approximately
+              <strong>1,600 cases</strong> spanning slot counts 1–8,
+              instantiated from <strong>631 formula templates</strong> and
+              around <strong>4,000 reference images</strong>. The same formula
+              drives capability-aligned scoring and diagnostic trees. Across
+              nine leading models, attribute disentanglement and binding—not
+              scene-level composition—emerge as the primary bottlenecks.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section"
+        id="motivation"
+        aria-labelledby="motivation-title"
+      >
+        <div class="page-shell">
+          <header class="section-heading">
+            <div>
+              <p class="section-kicker">Motivation</p>
+              <h2 id="motivation-title">Why task labels stop scaling</h2>
+            </div>
+            <p>
+              “Subject composition” or “style transfer” may describe a final
+              task, but neither says which reference operation was required—or
+              which one failed.
+            </p>
+          </header>
+
+          <div class="problem-grid">
+            <article class="problem-card">
+              <span class="problem-number">01</span>
+              <h3>Incomplete coverage</h3>
+              <p>
+                Fixed task categories cannot keep pace with the combinatorial
+                ways entities, attributes, relations, layouts, and styles can be
+                mixed.
+              </p>
+            </article>
+            <article class="problem-card">
+              <span class="problem-number">02</span>
+              <h3>No failure diagnosis</h3>
+              <p>
+                A single score cannot tell whether a model missed the subject,
+                extracted the wrong attribute, or bound it to the wrong target.
+              </p>
+            </article>
+            <article class="problem-card">
+              <span class="problem-number">03</span>
+              <h3>Uncontrolled complexity</h3>
+              <p>
+                Without a common structure, the difficulty of cases from
+                different scenarios cannot be systematically controlled or
+                compared.
+              </p>
+            </article>
           </div>
 
-          <div class="column has-text-centered">
-            <div class="publication-links">
-              <span class="link-block">
-                <a href="https://arxiv.org/abs/0000.00000"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-file-pdf"></i>
-                  </span>
-                  <span>Paper</span>
-                </a>
-              </span>
-              <span class="link-block">
-                <a href="#BibTeX"
-                   class="external-link button is-normal is-rounded is-dark">
-                  <span class="icon">
-                      <i class="fas fa-quote-right"></i>
-                  </span>
-                  <span>BibTeX</span>
-                </a>
-              </span>
+          <section
+            class="benchmark-comparison"
+            aria-labelledby="comparison-title"
+          >
+            <header class="benchmark-comparison__header">
+              <div>
+                <p class="section-kicker">Benchmark positioning</p>
+                <h3 id="comparison-title">What capability-first design adds</h3>
+              </div>
+              <p>
+                TRACE-Bench makes the same compositional structure govern case
+                construction and evaluation, while requiring precise grounding
+                inside information-rich references.
+              </p>
+            </header>
+
+            <p class="table-scroll-hint">
+              Swipe horizontally to inspect all capabilities →
+            </p>
+            <div
+              class="alignment-table-wrap comparison-table-wrap"
+              aria-label="Comparison with existing multi-reference generation benchmarks"
+              tabindex="0"
+            >
+              <table class="alignment-table comparison-table">
+                <caption>
+                  Comparison with existing multi-reference generation
+                  benchmarks.
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Benchmark</th>
+                    <th scope="col">Split by</th>
+                    <th scope="col">Case basis</th>
+                    <th scope="col">Aligned evaluation</th>
+                    <th scope="col">Hard grounding</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">OmniContext</th>
+                    <td>Tasks</td>
+                    <td>Subtasks</td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--no"
+                        aria-label="No"
+                        >×</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--no"
+                        aria-label="No"
+                        >×</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">MultiBanana</th>
+                    <td>Tasks</td>
+                    <td>Reference-count tasks</td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--no"
+                        aria-label="No"
+                        >×</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--no"
+                        aria-label="No"
+                        >×</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">MICON-Bench</th>
+                    <td>Tasks</td>
+                    <td>Task templates</td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--no"
+                        aria-label="No"
+                        >×</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--yes"
+                        aria-label="Yes"
+                        >✓</span
+                      >
+                    </td>
+                  </tr>
+                  <tr>
+                    <th scope="row">MacroBench</th>
+                    <td>Tasks</td>
+                    <td>Long-context tasks</td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--yes"
+                        aria-label="Yes"
+                        >✓</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--no"
+                        aria-label="No"
+                        >×</span
+                      >
+                    </td>
+                  </tr>
+                  <tr class="comparison-highlight">
+                    <th scope="row">TRACE-Bench <span>(ours)</span></th>
+                    <td>Capabilities</td>
+                    <td>Compositional formulas</td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--yes"
+                        aria-label="Yes"
+                        >✓</span
+                      >
+                    </td>
+                    <td>
+                      <span
+                        class="comparison-mark comparison-mark--yes"
+                        aria-label="Yes"
+                        >✓</span
+                      >
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
+
+          <div class="principle-callout">
+            <span class="principle-label"
+              >TRACE-Bench reframes the unit of evaluation</span
+            >
+            <p>
+              <del>What task is this?</del
+              ><strong
+                >What reference-dependent capabilities does this prompt
+                require?</strong
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section section--tint"
+        id="framework"
+        aria-labelledby="framework-title"
+      >
+        <div class="page-shell">
+          <header class="section-heading">
+            <div>
+              <p class="section-kicker">Capability decomposition</p>
+              <h2 id="framework-title">Four operators, one shared backbone</h2>
+            </div>
+            <p>
+              The same symbolic structure organizes prompt construction,
+              complexity control, evaluation questions, and downstream
+              diagnosis.
+            </p>
+          </header>
+
+          <figure class="paper-figure">
+            <div
+              class="figure-viewport figure-viewport--wide"
+              tabindex="0"
+              aria-label="Scrollable four core capabilities figure"
+            >
+              <img
+                src="./static/images/tracebench/core-capabilities.webp"
+                width="2400"
+                height="888"
+                loading="lazy"
+                alt="A blue car and floral pattern example introduced step by step through Anchor, Disentangle, Apply, and Compose."
+              />
+            </div>
+            <figcaption>
+              <strong>The four atomic capabilities.</strong>
+              Anchor preserves the referenced car; Disentangle extracts only the
+              floral pattern; Apply transfers it to a coffee cup; Compose
+              arranges the modified cup and car into the requested scene.
+            </figcaption>
+          </figure>
+
+          <div class="operator-grid">
+            <article class="operator-card operator-card--anchor">
+              <span class="operator-symbol"><i>f</i></span>
+              <div>
+                <p>01 · Identity</p>
+                <h3>Anchor</h3>
+              </div>
+              <p>
+                Locate a referenced entity and preserve its identity-defining
+                visual information.
+              </p>
+              <code>f(I, e)</code>
+            </article>
+            <article class="operator-card operator-card--disentangle">
+              <span class="operator-symbol"><i>g</i></span>
+              <div>
+                <p>02 · Attribute fidelity</p>
+                <h3>Disentangle</h3>
+              </div>
+              <p>
+                Extract a referenced attribute while separating it from its
+                original carrier.
+              </p>
+              <code>g(I, E, a)</code>
+            </article>
+            <article class="operator-card operator-card--apply">
+              <span class="operator-symbol">⊕</span>
+              <div>
+                <p>03 · Binding</p>
+                <h3>Apply</h3>
+              </div>
+              <p>
+                Bind the extracted attribute to the designated entity,
+                exclusively and naturally.
+              </p>
+              <code>T<sub>e</sub> ⊕ g</code>
+            </article>
+            <article class="operator-card operator-card--compose">
+              <span class="operator-symbol"><i>C</i></span>
+              <div>
+                <p>04 · Composition</p>
+                <h3>Compose</h3>
+              </div>
+              <p>
+                Arrange multiple contents under spatial, relational, or global
+                constraints.
+              </p>
+              <code>C(E₁, …, Eₙ)</code>
+            </article>
+          </div>
+
+          <div class="formula-card">
+            <div>
+              <p class="formula-label">Example · slot 4</p>
+              <p class="formula">
+                C(f₁, T<sub>e</sub> ⊕ g₁ ⊕ g₂) ⊕ g<sub>global</sub>
+              </p>
+            </div>
+            <p>
+              One anchored entity and three disentangled reference terms yield
+              <strong>slot(F) = |f| + |g| = 4</strong>. Text-only content
+              remains in natural language. Slot count measures
+              reference-conditioned structure; clutter, attribute granularity,
+              and reference ambiguity remain additional sources of difficulty.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="benchmark" aria-labelledby="benchmark-title">
+        <div class="page-shell">
+          <header class="section-heading">
+            <div>
+              <p class="section-kicker">Benchmark</p>
+              <h2 id="benchmark-title">
+                Structured from the image pool onward
+              </h2>
+            </div>
+            <p>
+              References are filtered, tagged, balanced, and instantiated
+              through formula templates before being realized as
+              natural-language prompts.
+            </p>
+          </header>
+
+          <ul class="stat-band">
+            <li><strong>≈1,600</strong><span>evaluation cases</span></li>
+            <li><strong>631</strong><span>formula templates</span></li>
+            <li><strong>≈4,000</strong><span>reference images</span></li>
+            <li><strong>1–8</strong><span>operator slots</span></li>
+            <li><strong>9</strong><span>evaluated models</span></li>
+          </ul>
+
+          <figure class="paper-figure">
+            <div
+              class="figure-viewport figure-viewport--wide"
+              tabindex="0"
+              aria-label="Scrollable benchmark construction pipeline figure"
+            >
+              <img
+                src="./static/images/tracebench/construction-pipeline.webp"
+                width="2400"
+                height="972"
+                loading="lazy"
+                alt="TRACE-Bench construction pipeline from multiple image collections through filtering, structured tagging, balanced sampling, synthetic data, formula templates, and prompt construction."
+              />
+            </div>
+            <figcaption>
+              <strong>Benchmark construction pipeline.</strong>
+              Candidate images are collected and filtered from multiple sources,
+              annotated through structured tagging, balanced source by source,
+              augmented with synthetic data, and then used for formula-template
+              sampling and prompt construction.
+            </figcaption>
+          </figure>
+
+          <ol class="pipeline-grid">
+            <li>
+              <span>01</span>
+              <h3>Curate</h3>
+              <p>
+                Collect complementary artistic and real-world sources, then
+                apply source-specific quality and safety filtering.
+              </p>
+            </li>
+            <li>
+              <span>02</span>
+              <h3>Tag</h3>
+              <p>
+                Ground entities and organize attributes into Appearance, Form,
+                Dynamics, and Global layers.
+              </p>
+            </li>
+            <li>
+              <span>03</span>
+              <h3>Balance</h3>
+              <p>
+                Favor underrepresented categories and attributes, manually
+                inspect quality, and supplement rare cases.
+              </p>
+            </li>
+            <li>
+              <span>04</span>
+              <h3>Instantiate</h3>
+              <p>
+                Sample formulas, pair them with references, and realize coherent
+                prompts that bind every image to a target.
+              </p>
+            </li>
+          </ol>
+
+          <section class="quality-panel" aria-labelledby="quality-title">
+            <header class="quality-panel__header">
+              <div>
+                <p class="section-kicker">Quality control</p>
+                <h3 id="quality-title">From a broad pool to auditable cases</h3>
+              </div>
+              <p>
+                Reference images and realized prompts pass separate balancing,
+                automated filtering, and manual inspection stages before entering
+                the benchmark.
+              </p>
+            </header>
+            <ol class="quality-flow">
+              <li>
+                <span>01</span><strong>≈50K</strong
+                ><small>filtered candidate images</small>
+              </li>
+              <li>
+                <span>02</span><strong>≈4K</strong
+                ><small>balanced sample · about 8% of the pool</small>
+              </li>
+              <li>
+                <span>03</span><strong>3,839</strong
+                ><small>retained after full manual image inspection</small>
+              </li>
+              <li>
+                <span>04</span><strong>+≈200</strong
+                ><small>synthetic samples for rare cases</small>
+              </li>
+            </ol>
+            <p class="quality-note">
+              <strong>Prompt audit.</strong> GPT-5.4 filters out 4.3% of
+              constructed prompts; manual review removes a further 9% of the
+              remaining cases.
+            </p>
+          </section>
+
+          <figure class="paper-figure paper-figure--compact">
+            <div
+              class="figure-viewport figure-viewport--wide"
+              tabindex="0"
+              aria-label="Scrollable benchmark distribution figure"
+            >
+              <img
+                src="./static/images/tracebench/benchmark-distribution.webp"
+                width="2400"
+                height="627"
+                loading="lazy"
+                alt="TRACE-Bench distributions of semantic categories, controllable attributes, and image sources."
+              />
+            </div>
+            <figcaption>
+              <strong>Benchmark statistics after construction.</strong>
+              The left panel summarizes semantic categories and controllable
+              attributes; the right panel shows the composition of image
+              sources.
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section
+        class="section section--paper"
+        id="evaluation"
+        aria-labelledby="evaluation-title"
+      >
+        <div class="page-shell">
+          <header class="section-heading">
+            <div>
+              <p class="section-kicker">Operator-aligned evaluation</p>
+              <h2 id="evaluation-title">The formula becomes the checklist</h2>
+            </div>
+            <p>
+              Instead of asking whether the full image is simply “good,”
+              TRACE-Bench turns each operator instance into explicit binary
+              questions about its intended capability.
+            </p>
+          </header>
+
+          <figure class="paper-figure">
+            <div
+              class="figure-viewport figure-viewport--wide"
+              tabindex="0"
+              aria-label="Scrollable operator-aligned evaluation figure"
+            >
+              <img
+                src="./static/images/tracebench/operator-evaluation.webp"
+                width="2400"
+                height="1109"
+                loading="lazy"
+                alt="Two TRACE-Bench cases showing references, brief prompts, formulas, generations, and operator-level pass-fail analyses with localized failure reasons."
+              />
+            </div>
+            <figcaption>
+              <strong>Representative operator-aligned evaluations.</strong>
+              Formula terms map directly to capability-specific checks,
+              localizing identity mismatch, duplication, source leakage, and
+              attribute mis-binding that a holistic score would hide.
+            </figcaption>
+          </figure>
+
+          <div class="criteria-grid">
+            <article>
+              <span class="criteria-symbol op-anchor"><i>f</i></span>
+              <div>
+                <h3>Identity</h3>
+                <p>
+                  Entity existence and appearance consistency with the
+                  reference.
+                </p>
+              </div>
+            </article>
+            <article>
+              <span class="criteria-symbol op-disentangle"><i>g</i></span>
+              <div>
+                <h3>Attribute fidelity</h3>
+                <p>
+                  Attribute presence and consistency with its reference source.
+                </p>
+              </div>
+            </article>
+            <article>
+              <span class="criteria-symbol op-apply">⊕</span>
+              <div>
+                <h3>Binding</h3>
+                <p>
+                  Carrier integrity, attribute exclusivity, and natural
+                  integration.
+                </p>
+              </div>
+            </article>
+            <article>
+              <span class="criteria-symbol op-compose"><i>C</i></span>
+              <div>
+                <h3>Composition</h3>
+                <p>
+                  Coexistence, relation satisfaction, spatial coherence, and no
+                  duplication or leakage.
+                </p>
+              </div>
+            </article>
+          </div>
+
+          <section
+            class="reliability-panel"
+            aria-labelledby="reliability-title"
+          >
+            <div class="reliability-copy">
+              <p class="section-kicker">Human-alignment audit</p>
+              <h3 id="reliability-title">
+                Automatic scores track human judgments
+              </h3>
+              <p>
+                On 200 sampled benchmark cases, each generated by both Nano
+                Banana 2 and Emu3.5 (400 outputs in total), four VLM judges were
+                compared against human checklist annotations. Individual judges
+                match 85.4–88.4% of checklist decisions.
+              </p>
+              <p class="reliability-takeaway">
+                <strong>88.6%</strong><span>ensemble agreement</span>
+              </p>
+              <p class="reliability-note">
+                <strong>Full-benchmark judge:</strong> Gemini 2.5 Pro offers a
+                practical reliability–cost trade-off; the ensemble is a
+                higher-confidence option when added evaluation cost is
+                acceptable. Agreement remains empirical: judge choice and
+                ambiguous visual evidence can still affect individual
+                decisions.
+              </p>
             </div>
 
-          </div>
+            <p class="table-scroll-hint">
+              Swipe horizontally to inspect all agreement metrics →
+            </p>
+            <div
+              class="alignment-table-wrap"
+              aria-label="VLM judge alignment with human annotations"
+              tabindex="0"
+            >
+              <table class="alignment-table">
+                <caption>
+                  Alignment between VLM judges and human annotations on 400
+                  outputs from 200 sampled benchmark cases.
+                </caption>
+                <thead>
+                  <tr>
+                    <th scope="col">Judge</th>
+                    <th scope="col">
+                      <abbr title="Pearson correlation">Pear.</abbr> ↑
+                    </th>
+                    <th scope="col">
+                      <abbr title="Spearman correlation">Spear.</abbr> ↑
+                    </th>
+                    <th scope="col">
+                      <abbr title="Mean absolute error">MAE</abbr> ↓
+                    </th>
+                    <th scope="col">Agreement ↑</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">Gemini 3 Pro</th>
+                    <td>0.608</td>
+                    <td class="score-best">0.613</td>
+                    <td class="score-best">0.152</td>
+                    <td>86.8%</td>
+                  </tr>
+                  <tr class="judge-used">
+                    <th scope="row">
+                      Gemini 2.5 Pro
+                      <span class="table-badge table-badge--judge">used</span>
+                    </th>
+                    <td>0.554</td>
+                    <td>0.537</td>
+                    <td>0.173</td>
+                    <td>85.4%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">GPT-5.1</th>
+                    <td>0.569</td>
+                    <td>0.558</td>
+                    <td>0.162</td>
+                    <td>88.1%</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">GPT-5.4</th>
+                    <td>0.580</td>
+                    <td>0.542</td>
+                    <td>0.156</td>
+                    <td>88.4%</td>
+                  </tr>
+                  <tr class="alignment-ensemble">
+                    <th scope="row">Ensemble</th>
+                    <td class="score-best">0.662</td>
+                    <td>0.604</td>
+                    <td>0.153</td>
+                    <td class="score-best">88.6%</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </section>
         </div>
-      </div>
-    </div>
-  </div>
-</section>
+      </section>
 
-<section class="hero teaser" id="teaser">
-  <div class="container is-max-desktop">
-    <div class="hero-body">
-      <div class="content has-text-justified is-size-5" style="max-width: 48rem; margin: 0 auto 1.25rem;">
-        <h2 class="title is-3 has-text-centered" style="margin-bottom: 1rem;">TRACE-Bench teaser</h2>
-        <p>
-          Multi-reference image generation combines several references into one output, but
-          benchmarks often collapse this combinatorial space into coarse task bins. TRACE-Bench
-          instead decomposes prompts into explicit <strong>capability operators</strong> so that
-          success and failure can be traced to concrete skills—such as anchoring a subject,
-          disentangling attributes, applying edits, or composing scenes—rather than a single
-          holistic score.
-        </p>
-        <p>
-          The figure below summarizes how we organize evaluation around these operators and how
-          diagnostic analysis localizes where current models still struggle.
-        </p>
-      </div>
-      <figure class="image publication-figure">
-        <img src="./static/images/teaser2.jpg"
-             loading="lazy"
-             alt="TRACE-Bench overview: multi-reference generation with capability-oriented evaluation.">
-      </figure>
-      <p class="figure-caption has-text-centered" style="max-width: 48rem; margin-left: auto; margin-right: auto;">
-        Overview of TRACE-Bench: from compositional formulas over references to operator-aligned
-        metrics and failure analysis.
-      </p>
-    </div>
-  </div>
-</section>
+      <section class="section" id="results" aria-labelledby="results-title">
+        <div class="page-shell">
+          <header class="section-heading">
+            <div>
+              <p class="section-kicker">Leaderboard</p>
+              <h2 id="results-title">
+                Strong composition does not mean faithful transfer
+              </h2>
+            </div>
+            <p>
+              Nine model versions are evaluated over the full benchmark.
+              Scores are averaged across slot levels 1–8; higher is better.
+              Results are a snapshot of these versions and should be
+              re-evaluated as systems change.
+            </p>
+          </header>
 
+          <p class="table-scroll-hint">
+            Swipe horizontally to inspect all model metrics →
+          </p>
+          <section
+            class="result-table-wrap"
+            aria-label="TRACE-Bench model results"
+            tabindex="0"
+          >
+            <table class="result-table">
+              <caption>
+                Overall TRACE-Bench results averaged over slots 1–8.
+              </caption>
+              <thead>
+                <tr>
+                  <th scope="col">Model</th>
+                  <th scope="col">Anchor <i>f</i></th>
+                  <th scope="col">Disentangle <i>g</i></th>
+                  <th scope="col">Apply ⊕</th>
+                  <th scope="col">Compose <i>C</i></th>
+                  <th scope="col">Average</th>
+                  <th scope="col">CLIP Sim</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="group-row">
+                  <th colspan="7" scope="rowgroup">Proprietary models</th>
+                </tr>
+                <tr>
+                  <th scope="row">GPT-Image-1.5</th>
+                  <td>0.7649</td>
+                  <td>0.6890</td>
+                  <td>0.7541</td>
+                  <td class="score-best">0.9259</td>
+                  <td>0.8118</td>
+                  <td class="score-best">0.2969</td>
+                </tr>
+                <tr>
+                  <th scope="row">Nano Banana</th>
+                  <td>0.7650</td>
+                  <td>0.6786</td>
+                  <td>0.7631</td>
+                  <td>0.8975</td>
+                  <td>0.7981</td>
+                  <td>0.2867</td>
+                </tr>
+                <tr class="model-winner">
+                  <th scope="row">
+                    Nano Banana 2 <span class="table-badge">best avg.</span>
+                  </th>
+                  <td class="score-best">0.7724</td>
+                  <td class="score-best">0.7384</td>
+                  <td class="score-best">0.7989</td>
+                  <td>0.9100</td>
+                  <td class="score-best">0.8205</td>
+                  <td>0.2944</td>
+                </tr>
+                <tr>
+                  <th scope="row">Nano Banana Pro</th>
+                  <td>0.7488</td>
+                  <td>0.7148</td>
+                  <td>0.7869</td>
+                  <td>0.9214</td>
+                  <td>0.8172</td>
+                  <td>0.2962</td>
+                </tr>
+                <tr class="group-row">
+                  <th colspan="7" scope="rowgroup">Open-source models</th>
+                </tr>
+                <tr class="open-winner">
+                  <th scope="row">
+                    Emu3.5
+                    <span class="table-badge table-badge--open">best open</span>
+                  </th>
+                  <td>0.6587</td>
+                  <td>0.4982</td>
+                  <td>0.5434</td>
+                  <td>0.7871</td>
+                  <td>0.6561</td>
+                  <td>0.2917</td>
+                </tr>
+                <tr>
+                  <th scope="row">FireRed Image Edit 1.1</th>
+                  <td>0.6348</td>
+                  <td>0.4703</td>
+                  <td>0.4258</td>
+                  <td>0.7218</td>
+                  <td>0.5889</td>
+                  <td>0.2603</td>
+                </tr>
+                <tr>
+                  <th scope="row">Qwen-Image-Edit-2509</th>
+                  <td>0.5210</td>
+                  <td>0.3755</td>
+                  <td>0.3282</td>
+                  <td>0.7627</td>
+                  <td>0.5483</td>
+                  <td>0.2742</td>
+                </tr>
+                <tr>
+                  <th scope="row">Qwen-Image-Edit-2511</th>
+                  <td>0.6009</td>
+                  <td>0.4097</td>
+                  <td>0.3742</td>
+                  <td>0.7776</td>
+                  <td>0.5858</td>
+                  <td>0.2758</td>
+                </tr>
+                <tr>
+                  <th scope="row">OmniGen2</th>
+                  <td>0.5635</td>
+                  <td>0.3719</td>
+                  <td>0.3195</td>
+                  <td>0.7070</td>
+                  <td>0.5348</td>
+                  <td>0.2693</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
 
-<section class="section">
-  <div class="container is-max-desktop">
-    <!-- Abstract. -->
-    <div class="columns is-centered has-text-centered" id="abstract">
-      <div class="column is-four-fifths">
-        <h2 class="title is-3">Abstract</h2>
-        <div class="content has-text-justified">
-          <p>
-            Recent advances in unified multimodal models have significantly improved multi-reference
-            image generation, yet existing benchmarks still organize evaluation around predefined
-            task types, such as "subject composition."
-          </p>
-          <p>
-            This task-oriented design is ill-suited for the combinatorial nature of multi-reference
-            generation, resulting in fragmented coverage, uncontrolled complexity, and holistic
-            scores that offer no diagnostic value. We rethink multi-reference evaluation from a
-            capability-oriented perspective.
-          </p>
-          <p>
-            We observe that diverse multi-reference tasks share a common set of atomic operations,
-            which we formalize as four capability operators: Anchor (<span class="trace-math">f</span>), Disentangle
-            (<span class="trace-math">g</span>), Apply (<span class="trace-math-symbol">&oplus;</span>), and Compose (<span class="trace-math-upright">C</span>). Any multi-reference prompt can
-            then be represented as a compositional formula over these operators, with complexity
-            naturally quantified by the number of operator slots.
-          </p>
-          <p>
-            Building on this formulation, we construct TRACE-Bench, comprising approximately 1,600
-            evaluation cases across slot counts 1-8, built from 631 formula templates and around
-            4,000 reference images spanning diverse artistic styles and real-world subjects.
-          </p>
-          <p>
-            The symbolic structure of each case directly drives an operator-aligned evaluation
-            protocol for per-capability scoring and a diagnostic tree analysis for recursive
-            failure localization. Evaluating 9 leading models reveals insights invisible to holistic
-            scoring: the primary bottleneck lies in disentanglement (<span class="trace-math">g</span>) and attribute
-            binding (<span class="trace-math-symbol">&oplus;</span>) rather than scene-level composition (<span class="trace-math-upright">C</span>), with even the best
-            model scoring only 0.74 on attribute fidelity.
-          </p>
-        </div>
-      </div>
-    </div>
-    <!--/ Abstract. -->
+          <ul class="finding-grid">
+            <li class="finding-card finding-card--primary">
+              <span>Best average</span><strong>0.8205</strong>
+              <h3>Nano Banana 2 leads overall</h3>
+              <p>
+                It achieves the strongest Anchor, Disentangle, Apply, and
+                average scores.
+              </p>
+            </li>
+            <li class="finding-card">
+              <span>Primary bottleneck</span><strong>0.7384</strong>
+              <h3>Attribute fidelity remains hard</h3>
+              <p>
+                Even the best Disentangle score is far from the normalized ideal
+                of 1.
+              </p>
+            </li>
+            <li class="finding-card">
+              <span>Relatively strongest</span><strong>0.9259</strong>
+              <h3>Composition is not the full story</h3>
+              <p>
+                Models can arrange plausible scenes while still extracting or
+                binding the wrong content.
+              </p>
+            </li>
+          </ul>
 
-    <!-- Benchmark overview figures (subsections + prose, similar to SaFiRe project pages). -->
-    <div class="columns is-centered" id="overview">
-      <div class="column is-four-fifths content has-text-justified">
-        <h2 class="title is-3 has-text-centered">Benchmark overview</h2>
-        <p class="has-text-centered" style="margin-bottom: 1.5rem;">
-          TRACE-Bench connects <strong>symbolic structure</strong> (how a prompt uses each operator)
-          to <strong>measurable behavior</strong> (per-operator scores and diagnostics). The
-          following figures walk through the formulation, dataset construction, and aggregate model
-          comparison.
-        </p>
-
-        <div class="figure-section">
-          <h3 class="title is-4">Capability operators and formulas</h3>
-          <p>
-            We argue that diverse multi-reference prompts can be written as short formulas over four
-            operators: <strong>Anchor</strong> (<span class="trace-math">f</span>) grounds identity from a reference,
-            <strong>Disentangle</strong> (<span class="trace-math">g</span>) separates factors such as pose or style,
-            <strong>Apply</strong> (<span class="trace-math-symbol">&oplus;</span>) binds attributes to parts, and <strong>Compose</strong>
-            (<span class="trace-math-upright">C</span>) builds the final layout. Slot count reflects formula complexity and aligns
-            with how we stratify evaluation.
-          </p>
-          <figure class="image publication-figure">
-            <img src="./static/images/core_capability.jpg"
-                 loading="lazy"
-                 alt="Four capability operators: Anchor, Disentangle, Apply, and Compose.">
-          </figure>
-          <p class="figure-caption">
-            <strong>Figure.</strong> Operator definitions and how natural multi-reference prompts map
-            to compositional formulas (see paper for formal notation and examples).
-          </p>
-        </div>
-
-        <div class="figure-section">
-          <h3 class="title is-4">Data construction and evaluation pipeline</h3>
-          <p>
-            The benchmark is built from curated references, template-driven formula instantiation,
-            and automated rendering of evaluation pairs. Each case carries explicit operator
-            annotations so that scoring and error analysis stay aligned with the intended capability,
-            rather than conflating unrelated errors into one score.
-          </p>
-          <figure class="image publication-figure">
-            <img src="./static/images/data_pipeline.jpg"
-                 loading="lazy"
-                 alt="TRACE-Bench data construction and evaluation pipeline.">
-          </figure>
-          <p class="figure-caption">
-            <strong>Figure.</strong> End-to-end pipeline from reference assets and templates to
-            operator-aware evaluation and diagnostic reporting.
-          </p>
-        </div>
-
-        <div class="figure-section">
-          <h3 class="title is-4">Radar comparison across models</h3>
-          <p>
-            Aggregating operator-aligned metrics highlights <strong>where</strong> strong models
-            still fail: for example, disentanglement and attribute binding often lag composition,
-            which is difficult to see from headline numbers alone. The radar view is meant as a
-            compact, qualitative summary—pair it with the quantitative table below and the per-case
-            analysis in the paper.
-          </p>
-          <div class="radar-wrap">
-            <figure class="image publication-figure">
-              <img src="./static/images/radar.png"
-                   loading="lazy"
-                   alt="Radar-style summary of model performance across operator-aligned metrics.">
+          <div class="analysis-grid">
+            <figure class="paper-figure analysis-figure analysis-figure--wide">
+              <div
+                class="figure-viewport figure-viewport--wide"
+                tabindex="0"
+                aria-label="Scrollable Anchor difficulty analysis figure"
+              >
+                <img
+                  src="./static/images/tracebench/anchor-difficulty.webp"
+                  width="2617"
+                  height="975"
+                  loading="lazy"
+                  alt="Entity-level Anchor scores for four models vary only mildly across slot counts but decline consistently as the number of entities in a reference image increases."
+                />
+              </div>
+              <figcaption>
+                <strong>Anchor under two difficulty factors.</strong> Anchor
+                scores vary only weakly across slot levels, but fall clearly as
+                reference images contain more entities—showing why
+                operator-specific difficulty cannot be read from slot count
+                alone.
+              </figcaption>
+            </figure>
+            <figure class="paper-figure analysis-figure">
+              <img
+                src="./static/images/tracebench/slot-trend.webp"
+                width="1400"
+                height="1233"
+                loading="lazy"
+                alt="Average operator-aligned model performance from slot 1 through slot 8, with a sharper decline for open-source models."
+              />
+              <figcaption>
+                <strong>Performance across slot levels.</strong> Scores
+                generally decrease as structural complexity grows, especially
+                for open-source models; content-level factors make the trend
+                non-monotonic.
+              </figcaption>
+            </figure>
+            <figure class="paper-figure analysis-figure">
+              <img
+                src="./static/images/tracebench/attribute-subtypes.webp"
+                width="1400"
+                height="1395"
+                loading="lazy"
+                alt="Radar chart comparing Disentangle performance across pattern and texture, material, damage and wear, font, hairstyle, facial features, shape, action and pose, expression, orientation, motion effect, global attribute, background, and relation subtypes."
+              />
+              <figcaption>
+                <strong>Disentangle by attribute subtype.</strong> The overall
+                <i>g</i> score hides distinct model strengths and weaknesses
+                across the Appearance, Form, Dynamics, and Global taxonomy, as
+                well as background and relation references.
+              </figcaption>
             </figure>
           </div>
-          <p class="figure-caption">
-            <strong>Figure.</strong> Multi-model comparison on TRACE-Bench operator dimensions
-            (exact metrics and model list in the paper).
-          </p>
         </div>
-      </div>
-    </div>
-    <!--/ Benchmark overview figures. -->
+      </section>
 
-    <!-- Main results: table figure → static/images/tables/table.png -->
-    <div class="columns is-centered" id="results">
-      <div class="column is-four-fifths content has-text-justified">
-        <h2 class="title is-3 has-text-centered">Main results</h2>
-        <p>
-          The table summarizes <strong>operator-aligned evaluation dimensions</strong> and
-          <strong>overall model rankings</strong> on TRACE-Bench (including averages over slot
-          counts 1–8). For zoomable vector text and full footnotes, see the
-          <a href="https://arxiv.org/pdf/0000.00000.pdf">arXiv PDF</a>; the figure below matches the
-          layout in the paper for easy reading on this page.
-        </p>
-        <figure class="image table-figure">
-          <img src="./static/images/tables/table.png"
-               loading="lazy"
-               alt="Main quantitative results tables from TRACE-Bench paper.">
-        </figure>
-        <p class="figure-caption">
-          <strong>Table.</strong> Main quantitative results; see the
-          <a href="https://arxiv.org/pdf/0000.00000.pdf">arXiv PDF</a> for complete captions and
-          additional breakdowns.
-        </p>
-      </div>
-    </div>
-    <!--/ Main results. -->
+      <section
+        class="section section--dark"
+        id="diagnosis"
+        aria-labelledby="diagnosis-title"
+      >
+        <div class="page-shell">
+          <header class="section-heading section-heading--dark">
+            <div>
+              <p class="section-kicker">Diagnostic trees</p>
+              <h2 id="diagnosis-title">
+                A low score says what failed.<br />The tree asks why.
+              </h2>
+            </div>
+            <p>
+              TRACE-Bench recursively removes reference-conditioned complexity
+              and compares parent and child cases, revealing whether a failure
+              is intrinsic or introduced by interference.
+            </p>
+          </header>
 
-  </div>
-</section>
+          <figure class="paper-figure paper-figure--dark">
+            <div
+              class="figure-viewport figure-viewport--medium"
+              tabindex="0"
+              aria-label="Scrollable diagnostic tree figure"
+            >
+              <img
+                src="./static/images/tracebench/diagnostic-tree.webp"
+                width="1800"
+                height="967"
+                loading="lazy"
+                alt="A diagnostic tree that removes a global style reference and decomposes a multi-reference composition into simpler branches for a vintage car, woman, and tuxedo corgi."
+              />
+            </div>
+            <figcaption>
+              <strong>Representative diagnostic tree.</strong>
+              The woman becomes correct after the global style is removed,
+              indicating style-induced interference; the vintage car still fails
+              in a simpler branch, indicating an intrinsically harder anchor.
+            </figcaption>
+          </figure>
 
+          <section
+            class="diagnostic-outcomes"
+            aria-labelledby="diagnostic-outcomes-title"
+          >
+            <div class="diagnostic-outcomes__copy">
+              <p class="section-kicker">Aggregate diagnosis · 200 cases</p>
+              <h3 id="diagnostic-outcomes-title">
+                Interference—not isolated failure—dominates.
+              </h3>
+              <p>
+                For Emu3.5, joint-composition interference is the largest
+                localized source for Anchor, Disentangle, and Apply: the model
+                often preserves isolated reference content, then loses it when
+                multiple reference-conditioned entities are combined.
+              </p>
+              <p class="diagnostic-outcomes__metric">
+                <strong>38.5%</strong
+                ><span>joint-composition interference overall</span>
+              </p>
+              <p class="diagnostic-outcomes__note">
+                <strong>Compose behaves differently:</strong> global-reference
+                interference is its largest localized failure source at 29.0%.
+              </p>
+            </div>
 
-<section class="section" id="BibTeX">
-  <div class="container is-max-desktop content">
-    <h2 class="title">BibTeX</h2>
-    <pre><code>@article{wang2026tracebench,
-  title   = {{TRACE-Bench}: Decomposing and Diagnosing Multi-Reference Image Generation},
-  author  = {Wang, Haoran and Ma, Chaofan and Yi, Ran and Ma, Lizhuang},
-  journal = {arXiv preprint arXiv:0000.00000},
-  url     = {https://arxiv.org/abs/0000.00000},
-  year    = {2026}
+            <div class="diagnostic-outcomes__table">
+              <p class="table-scroll-hint table-scroll-hint--dark">
+                Swipe horizontally to inspect every operator →
+              </p>
+              <div
+                class="diagnostic-table-wrap"
+                aria-label="Distribution of diagnostic outcomes across 200 Emu3.5 cases"
+                tabindex="0"
+              >
+                <table class="diagnostic-table">
+                  <caption>
+                    Distribution of diagnostic outcomes across 200 Emu3.5
+                    cases.
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th scope="col">Outcome / source</th>
+                      <th scope="col">Anchor <i>f</i></th>
+                      <th scope="col">Disentangle <i>g</i></th>
+                      <th scope="col">Apply ⊕</th>
+                      <th scope="col">Compose <i>C</i></th>
+                      <th scope="col">Overall</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th scope="row">Stable success</th>
+                      <td>27.9%</td>
+                      <td>27.6%</td>
+                      <td>38.9%</td>
+                      <td>45.2%</td>
+                      <td>33.7%</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Persistent failure</th>
+                      <td>4.7%</td>
+                      <td>13.2%</td>
+                      <td>7.3%</td>
+                      <td>12.9%</td>
+                      <td>9.8%</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Global reference</th>
+                      <td>14.0%</td>
+                      <td>10.5%</td>
+                      <td>9.1%</td>
+                      <td class="diagnostic-score-key">29.0%</td>
+                      <td>13.7%</td>
+                    </tr>
+                    <tr class="diagnostic-row-key">
+                      <th scope="row">Joint composition</th>
+                      <td>48.8%</td>
+                      <td>43.4%</td>
+                      <td>41.1%</td>
+                      <td>9.7%</td>
+                      <td>38.5%</td>
+                    </tr>
+                    <tr>
+                      <th scope="row">Relation / attribute</th>
+                      <td>4.7%</td>
+                      <td>5.3%</td>
+                      <td>3.6%</td>
+                      <td>3.2%</td>
+                      <td>4.4%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <div class="diagnostic-grid">
+            <div class="diagnostic-stat">
+              <p class="section-kicker">Human validation</p>
+              <strong>82.6<span>%</span></strong>
+              <h3>automatic–human localization agreement</h3>
+              <p>
+                Measured on diagnostic trees for 200 Emu3.5 cases, with humans
+                independently identifying the node where each failure
+                originated.
+              </p>
+            </div>
+            <figure class="diagnostic-chart">
+              <img
+                src="./static/images/tracebench/diagnostic-depth.webp"
+                width="1000"
+                height="700"
+                loading="lazy"
+                alt="Cumulative pass rate increases as diagnostic tree nodes are simplified from the original root to maximum relative depth."
+              />
+              <figcaption>
+                Many failed requirements become solvable only after
+                reference-conditioned complexity is removed.
+              </figcaption>
+            </figure>
+            <div class="diagnostic-insight">
+              <p class="section-kicker">What the tree separates</p>
+              <ul>
+                <li>
+                  <strong>Intrinsic deficit</strong
+                  ><span
+                    >The requirement fails even in the maximally simplified
+                    branch.</span
+                  >
+                </li>
+                <li>
+                  <strong>Cross-reference interference</strong
+                  ><span
+                    >The requirement succeeds alone but fails when other
+                    references are introduced.</span
+                  >
+                </li>
+                <li>
+                  <strong>Contextual reinforcement</strong
+                  ><span
+                    >A difficult reference becomes more stable when composed
+                    with related content.</span
+                  >
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section"
+        id="applications"
+        aria-labelledby="applications-title"
+      >
+        <div class="page-shell">
+          <header class="section-heading">
+            <div>
+              <p class="section-kicker">Applications</p>
+              <h2 id="applications-title">
+                Real tasks emerge from the same operators
+              </h2>
+            </div>
+            <p>
+              TRACE-Bench does not need a separate ontology of application
+              names. Practical settings are particular instantiations of the
+              shared compositional language.
+            </p>
+          </header>
+
+          <figure class="paper-figure">
+            <div
+              class="figure-viewport figure-viewport--wide"
+              tabindex="0"
+              aria-label="Scrollable application examples figure"
+            >
+              <img
+                src="./static/images/tracebench/applications.webp"
+                width="2400"
+                height="526"
+                loading="lazy"
+                alt="Virtual try-on and group photo layout cases represented as formulas, with successful and failed generations."
+              />
+            </div>
+            <figcaption>
+              <strong>Two application-oriented abstractions.</strong>
+              Virtual try-on binds clothing-related attachment references to a
+              target person; group-photo layout composes multiple referenced
+              subjects under a shared spatial constraint.
+            </figcaption>
+          </figure>
+
+          <div class="application-grid">
+            <article>
+              <p class="application-name">Virtual Try-On</p>
+              <p class="application-formula">
+                f(person) ⊕ g<sub>attach,1</sub> ⊕ g<sub>attach,2</sub> ⊕ ···
+              </p>
+              <p>
+                Preserve the target identity while binding one or more garments
+                and their reference-specific details.
+              </p>
+            </article>
+            <article>
+              <p class="application-name">Group Photo Layout</p>
+              <p class="application-formula">
+                C(f₁, f₂, …, fₙ) ⊕ g<sub>layout</sub>
+              </p>
+              <p>
+                Preserve multiple identities while satisfying a shared
+                arrangement without dropping or duplicating subjects.
+              </p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section
+        class="section citation-section"
+        id="citation"
+        aria-labelledby="citation-title"
+      >
+        <div class="page-shell citation-grid">
+          <div>
+            <p class="section-kicker">Citation</p>
+            <h2 id="citation-title">Cite TRACE-Bench</h2>
+            <p>
+              The public paper link and arXiv identifier will be added when the
+              preprint is released.
+            </p>
+          </div>
+          <div class="citation-box">
+            <button
+              class="copy-button"
+              type="button"
+              data-copy-bibtex
+              aria-label="Copy BibTeX citation"
+            >
+              <span data-copy-label>Copy BibTeX</span>
+            </button>
+            <pre id="bibtex"><code>@misc{wang2026tracebench,
+  title  = {{TRACE-Bench}: Decomposing and Diagnosing
+            Multi-Reference Image Generation},
+  author = {Wang, Haoran and Ma, Chaofan and
+            Yi, Ran and Ma, Lizhuang},
+  year   = {2026},
+  note   = {Preprint}
 }</code></pre>
-    <p class="is-size-7">Replace the arXiv identifier with the public version when available.</p>
-  </div>
-</section>
+          </div>
+        </div>
+      </section>
+    </main>
 
-
-<footer class="footer">
-  <div class="container">
-    <div class="content has-text-centered">
-      <a class="icon-link"
-         href="https://arxiv.org/pdf/0000.00000.pdf"
-         title="Paper on arXiv (PDF)">
-        <i class="fas fa-file-pdf"></i>
-      </a>
-      <a class="icon-link external-link"
-         href="https://github.com/TraceBench/TraceBench.github.io"
-         title="Project page source">
-        <i class="fab fa-github"></i>
-      </a>
-    </div>
-    <div class="columns is-centered">
-      <div class="column is-8">
-        <div class="content">
+    <footer class="site-footer">
+      <div class="page-shell footer-grid">
+        <div>
+          <a class="brand brand--footer" href="#top"
+            ><span class="brand-mark" aria-hidden="true">T</span
+            ><span>TRACE-Bench</span></a
+          >
           <p>
-            This website is licensed under a <a rel="license"
-                                                href="http://creativecommons.org/licenses/by-sa/4.0/">Creative
-            Commons Attribution-ShareAlike 4.0 International License</a>.
-          </p>
-          <p>
-            Page layout adapted from the <a href="https://github.com/nerfies/nerfies.github.io">Nerfies</a>
-            project template; please retain attribution if you reuse the stylesheet structure.
+            Capability-oriented evaluation for multi-reference image generation.
           </p>
         </div>
+        <div class="footer-links">
+          <a href="#framework">Framework</a>
+          <a href="#results">Results</a>
+          <a href="#diagnosis">Diagnosis</a>
+          <a href="#citation">Citation</a>
+          <a
+            href="https://github.com/Amuseum-WHR/TraceBench.github.io"
+            target="_blank"
+            rel="noreferrer"
+            >GitHub ↗</a
+          >
+        </div>
+        <p class="footer-credit">
+          © 2026 TRACE-Bench · Shanghai Jiao Tong University<br />
+          Layout inspired by the Nerfies academic project-page template.
+        </p>
       </div>
-    </div>
-  </div>
-</footer>
+    </footer>
 
-</body>
+    <script src="./static/js/index.js"></script>
+  </body>
 </html>

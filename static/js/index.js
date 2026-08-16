@@ -1,78 +1,94 @@
-window.HELP_IMPROVE_VIDEOJS = false;
+(() => {
+  const toggle = document.querySelector("[data-nav-toggle]");
+  const nav = document.querySelector("[data-site-nav]");
 
-var INTERP_BASE = "./static/interpolation/stacked";
-var NUM_INTERP_FRAMES = 240;
+  const setMenuOpen = (open) => {
+    if (!toggle || !nav) return;
+    toggle.setAttribute("aria-expanded", String(open));
+    nav.classList.toggle("is-open", open);
+  };
 
-var interp_images = [];
-function preloadInterpolationImages() {
-  for (var i = 0; i < NUM_INTERP_FRAMES; i++) {
-    var path = INTERP_BASE + '/' + String(i).padStart(6, '0') + '.jpg';
-    interp_images[i] = new Image();
-    interp_images[i].src = path;
-  }
-}
-
-function setInterpolationImage(i) {
-  var image = interp_images[i];
-  image.ondragstart = function() { return false; };
-  image.oncontextmenu = function() { return false; };
-  $('#interpolation-image-wrapper').empty().append(image);
-}
-
-
-$(document).ready(function() {
-    // Check for click events on the navbar burger icon
-    $(".navbar-burger").click(function() {
-      // Toggle the "is-active" class on both the "navbar-burger" and the "navbar-menu"
-      $(".navbar-burger").toggleClass("is-active");
-      $(".navbar-menu").toggleClass("is-active");
-
+  if (toggle && nav) {
+    toggle.addEventListener("click", () => {
+      setMenuOpen(toggle.getAttribute("aria-expanded") !== "true");
     });
 
-    var options = {
-			slidesToScroll: 1,
-			slidesToShow: 3,
-			loop: true,
-			infinite: true,
-			autoplay: false,
-			autoplaySpeed: 3000,
-    }
+    nav.addEventListener("click", (event) => {
+      if (event.target.closest("a")) setMenuOpen(false);
+    });
 
-		// Initialize carousels only when present (template may omit them).
-    if (document.querySelector('.carousel')) {
-      var carousels = bulmaCarousel.attach('.carousel', options);
-      for(var i = 0; i < carousels.length; i++) {
-        carousels[i].on('before:show', state => {
-          console.log(state);
-        });
+    document.addEventListener("click", (event) => {
+      if (!nav.contains(event.target) && !toggle.contains(event.target))
+        setMenuOpen(false);
+    });
+
+    document.addEventListener("keydown", (event) => {
+      if (
+        event.key === "Escape" &&
+        toggle.getAttribute("aria-expanded") === "true"
+      ) {
+        setMenuOpen(false);
+        toggle.focus();
       }
-    }
+    });
 
-    // Access to bulmaCarousel instance of an element
-    var element = document.querySelector('#my-element');
-    if (element && element.bulmaCarousel) {
-    	// bulmaCarousel instance is available as element.bulmaCarousel
-    	element.bulmaCarousel.on('before-show', function(state) {
-    		console.log(state);
-    	});
-    }
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 820) setMenuOpen(false);
+    });
+  }
 
-    /*var player = document.getElementById('interpolation-video');
-    player.addEventListener('loadedmetadata', function() {
-      $('#interpolation-slider').on('input', function(event) {
-        console.log(this.value, player.duration);
-        player.currentTime = player.duration / 100 * this.value;
-      })
-    }, false);*/
-    if ($('#interpolation-slider').length) {
-      preloadInterpolationImages();
-      $('#interpolation-slider').on('input', function(event) {
-        setInterpolationImage(this.value);
-      });
-      setInterpolationImage(0);
-      $('#interpolation-slider').prop('max', NUM_INTERP_FRAMES - 1);
-    }
+  const copyButton = document.querySelector("[data-copy-bibtex]");
+  const bibtex = document.querySelector("#bibtex code");
 
-    bulmaSlider.attach();
+  if (copyButton && bibtex) {
+    const label = copyButton.querySelector("[data-copy-label]");
 
-})
+    copyButton.addEventListener("click", async () => {
+      const citation = bibtex.textContent.trim();
+      try {
+        await navigator.clipboard.writeText(citation);
+        label.textContent = "Copied";
+      } catch {
+        const selection = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(bibtex);
+        selection.removeAllRanges();
+        selection.addRange(range);
+        label.textContent = "Selected — press Ctrl/Cmd+C";
+      }
+
+      window.setTimeout(() => {
+        label.textContent = "Copy BibTeX";
+      }, 2200);
+    });
+  }
+
+  const navLinks = [...document.querySelectorAll('.site-nav a[href^="#"]')];
+  const observedSections = navLinks
+    .map((link) => document.querySelector(link.getAttribute("href")))
+    .filter(Boolean);
+
+  if ("IntersectionObserver" in window && observedSections.length) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+
+        if (!visible) return;
+        navLinks.forEach((link) => {
+          const active = link.getAttribute("href") === `#${visible.target.id}`;
+          link.classList.toggle("is-active", active);
+          if (active) link.setAttribute("aria-current", "location");
+          else link.removeAttribute("aria-current");
+        });
+      },
+      {
+        rootMargin: "-28% 0px -58% 0px",
+        threshold: [0, 0.2, 0.6],
+      },
+    );
+
+    observedSections.forEach((section) => observer.observe(section));
+  }
+})();
