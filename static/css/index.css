@@ -464,46 +464,58 @@ pre {
   font-weight: 780;
   line-height: 1;
   transition:
+    transform 160ms ease,
+    border-color 160ms ease,
     box-shadow 160ms ease,
     background 160ms ease;
 }
 
-.button--primary {
-  color: #fff;
-  background: var(--navy);
-  box-shadow: 0 10px 24px rgba(11, 24, 48, 0.17);
+.resource-button {
+  --resource-color: var(--blue-dark);
+  --resource-pale: var(--blue-pale);
+  border-color: color-mix(in srgb, var(--resource-color) 22%, var(--line));
+  background: rgba(255, 255, 255, 0.82);
+  box-shadow: 0 6px 18px rgba(11, 24, 48, 0.06);
 }
 
-.button--primary:hover {
-  background: #182c4d;
-  box-shadow: 0 13px 28px rgba(11, 24, 48, 0.22);
-}
-
-.button--outline {
-  border-color: var(--line-strong);
-  background: rgba(255, 255, 255, 0.7);
-}
-
-.button--outline:hover {
+.resource-button:hover {
+  border-color: color-mix(in srgb, var(--resource-color) 55%, var(--line));
   background: #fff;
-  box-shadow: var(--shadow-sm);
+  box-shadow: 0 11px 26px rgba(11, 24, 48, 0.12);
+  transform: translateY(-2px);
 }
 
-.button--disabled {
-  color: #77849a;
-  border-color: #d8dfe9;
-  background: rgba(233, 237, 243, 0.72);
-  cursor: not-allowed;
-}
-
-.button-status {
-  padding: 4px 7px;
-  border-radius: 99px;
-  color: #536078;
-  background: #fff;
+.resource-button__mark {
+  display: inline-grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--resource-color);
+  background: var(--resource-pale);
   font-size: 0.62rem;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  font-weight: 850;
+  letter-spacing: -0.02em;
+}
+
+.resource-button--paper {
+  --resource-color: #cf4d37;
+  --resource-pale: var(--coral-pale);
+}
+
+.resource-button--arxiv {
+  --resource-color: #b31b1b;
+  --resource-pale: #f9e4e4;
+}
+
+.resource-button--bibtex {
+  --resource-color: #ad7419;
+  --resource-pale: var(--gold-pale);
+}
+
+.resource-button--github {
+  --resource-color: var(--navy);
+  --resource-pale: #e8ebf0;
 }
 
 .hero-summary {
@@ -2428,10 +2440,6 @@ pre {
     grid-template-columns: 1fr 1fr;
   }
 
-  .hero-actions .button--outline {
-    grid-column: 1 / -1;
-  }
-
   .hero-summary {
     padding: 25px;
     border-radius: 24px;
@@ -2598,10 +2606,6 @@ pre {
 @media (max-width: 390px) {
   .hero-actions {
     grid-template-columns: 1fr;
-  }
-
-  .hero-actions .button--outline {
-    grid-column: auto;
   }
 
   .button {
