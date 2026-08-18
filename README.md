@@ -13,6 +13,7 @@ Shanghai Jiao Tong University
 [![Project Page](https://img.shields.io/badge/Project-Page-5b9a22?labelColor=555555)](https://amuseum-whr.github.io/TraceBench/)
 [![Paper](https://img.shields.io/badge/Paper-PDF-d64545?logo=adobeacrobatreader&logoColor=white&labelColor=555555)](https://arxiv.org/pdf/2608.16765)
 [![arXiv](https://img.shields.io/badge/arXiv-2608.16765-b31b1b?logo=arxiv&logoColor=white&labelColor=555555)](https://arxiv.org/abs/2608.16765)
+[![Hugging Face Daily Papers](https://img.shields.io/badge/Hugging%20Face-Daily%20Papers-FFD21E?logo=huggingface&logoColor=FFD21E&labelColor=555555)](https://huggingface.co/papers/2608.16765)
 [![ACM MM 2026](https://img.shields.io/badge/ACM%20MM-2026-0085CA?logo=acm&logoColor=white&labelColor=555555)](https://2026.acmmm.org/)
 [![GitHub](https://img.shields.io/badge/GitHub-TRACE--Bench-1683bd?logo=github&logoColor=white&labelColor=555555)](https://github.com/Amuseum-WHR/TraceBench)
 
